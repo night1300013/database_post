@@ -1,0 +1,42 @@
+- remove duplicates in a query response
+post = Post.select(:user_id).distinct
+SELECT DISTINCT user_id FROM post
+
+- filter records using inequalities, pattern matching, ranges, and boolean logic
+post = Post.where("id < ?", 2)
+SELECT * FROM post where id < 2
+
+post = Post.where('title LIKE ?', '%in%')
+SELECT * FROM post where title LIKE '%in%'
+
+post = Post.where(id: 1..2)
+SELECT * FROM post where id BETWEEN 1 and 2
+
+post = Post.where('id < ? AND title LIKE ?', 2, '%in%')
+SELECT * FROM post where id < 2 AND title LIKE '%in%'
+
+- sort records in a particular order
+post = Post.order(id: :desc)
+SELECT * FROM post ORDER BY id DESC
+
+- limit the number of records returned
+post = Post.limit(10)
+SELECT * FROM post LIMIT 10
+
+- group records into sections
+post = Post.title.group(:user_id).count
+SELECT user_id, COUNT(title) FROM post GROUP BY user_id
+
+- perform calculations using aggregate functions
+post = Post.title.count
+SELECT COUNT(title) FROM post
+
+- join tables using cross join, inner join, and outer join
+result = User.joins('CROSS JOIN post ON user.id = post.user_id')
+SELECT * FROM user CROSS JOIN post ON user.id = post.user_id
+
+result = User.joins(:post)
+SELECT * FROM user JOIN post ON user.id = post.user_id
+
+result = User.joins('LEFT OUTER JOIN post ON user.id = post.user_id')
+SELECT * FROM user LEFT OUTER JOIN post ON user.id = post.user_id
